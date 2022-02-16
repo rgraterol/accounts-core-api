@@ -1,11 +1,10 @@
-package accounts_test
+package services_test
 
 import (
 	"testing"
 
-	"github.com/rgraterol/accounts-core-api/application/db"
-	"github.com/rgraterol/accounts-core-api/domain/accounts"
-	"github.com/rgraterol/accounts-core-api/infrastructure/init/initializers"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
+	"github.com/rgraterol/accounts-core-api/domain/services"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -14,14 +13,9 @@ const (
 	mockUserID    = int64(1)
 )
 
-func init() {
-	initializers.MockDatabaseInitializer()
-}
-
 func Test_GivenValidInputs_WhenCreate_ThenReturnOk(t *testing.T) {
 	// Given
-	clearTestDB()
-	sut := accounts.Service{}
+	sut := services.Accounts{}
 	// When
 	err := sut.SaveNewAccount(mockUserID, mockCountryID)
 	// Then
@@ -30,17 +24,18 @@ func Test_GivenValidInputs_WhenCreate_ThenReturnOk(t *testing.T) {
 
 func Test_GivenExistingInputs_WhenCreate_ThenReturnDuplicatedError(t *testing.T) {
 	// Given
-	clearTestDB()
-	sut := accounts.Service{}
+	sut := services.Accounts{}
 	// When
 	err := sut.SaveNewAccount(mockUserID, mockCountryID)
 	assert.Nil(t, err)
 	err = sut.SaveNewAccount(mockUserID, mockCountryID)
 	// Then
 	assert.NotNil(t, err)
-	assert.Contains(t, err.Error(), accounts.DuplicatedAccountError)
+	assert.Contains(t, err.Error(), services.DuplicatedAccountError)
 }
 
-func clearTestDB() {
-	db.Gorm.Exec("DELETE FROM accounts")
+type RepositoryMockOk struct{}
+
+func (r *RepositoryMockOk) CreateAccount(account entities.Account) (entities.Account, error) {
+	return entities.Account{}, nil
 }

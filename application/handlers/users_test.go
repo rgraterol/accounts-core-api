@@ -9,7 +9,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rgraterol/accounts-core-api/application/handlers"
-	"github.com/rgraterol/accounts-core-api/domain/users"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -100,13 +100,13 @@ func Test_GivenUsersNews_WhenValidUserID_ThenOk(t *testing.T) {
 
 type ServiceMockOk struct{}
 
-func (s *ServiceMockOk) ReadUsersFeed(message users.UserMsg) error {
+func (s *ServiceMockOk) ReadUsersFeed(message entities.UserMsg) error {
 	return nil
 }
 
 type ServiceMockError struct{}
 
-func (s *ServiceMockError) ReadUsersFeed(message users.UserMsg) error {
+func (s *ServiceMockError) ReadUsersFeed(message entities.UserMsg) error {
 	return errors.New(serviceErrorMessage)
 }
 

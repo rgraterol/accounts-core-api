@@ -1,4 +1,4 @@
-package users
+package entities
 
 type UsersFeedMessage struct {
 	ID                string  `json:"id"`

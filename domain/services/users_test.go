@@ -1,10 +1,11 @@
-package users_test
+package services_test
 
 import (
 	"testing"
 
 	"github.com/pkg/errors"
-	"github.com/rgraterol/accounts-core-api/domain/users"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
+	"github.com/rgraterol/accounts-core-api/domain/services"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,8 +16,8 @@ const (
 func Test_GivenNewUser_WhenErrorOnAccountsService_ThenReturnError(t *testing.T) {
 	// GIVEN
 	msg := buildMsgNewUser()
-	sut := users.Service{
-		AccountService: &AccountServiceMockError{},
+	sut := services.Users{
+		AccountsService: &AccountServiceMockError{},
 	}
 
 	// WHEN
@@ -30,8 +31,8 @@ func Test_GivenNewUser_WhenErrorOnAccountsService_ThenReturnError(t *testing.T) 
 func Test_GivenMsgWithoutNewUser_ThenReturnOk(t *testing.T) {
 	// GIVEN
 	msg := buildMsgExistingUser()
-	sut := users.Service{
-		AccountService: &AccountServiceMockOk{},
+	sut := services.Users{
+		AccountsService: &AccountServiceMockOk{},
 	}
 
 	// WHEN
@@ -44,7 +45,7 @@ func Test_GivenMsgWithoutNewUser_ThenReturnOk(t *testing.T) {
 func Test_GivenNewUser_WhenAccountsOk_ThenReturnOk(t *testing.T) {
 	// GIVEN
 	msg := buildMsgExistingUser()
-	sut := users.Service{}
+	sut := services.Users{}
 
 	// WHEN
 	err := sut.ReadUsersFeed(msg)
@@ -53,17 +54,17 @@ func Test_GivenNewUser_WhenAccountsOk_ThenReturnOk(t *testing.T) {
 	assert.Nil(t, err)
 }
 
-func buildMsgNewUser() users.UserMsg {
-	return users.UserMsg{
+func buildMsgNewUser() entities.UserMsg {
+	return entities.UserMsg{
 		ID: 1,
-		Headers: users.UserMsgHeaders{
+		Headers: entities.UserMsgHeaders{
 			NewUser: true,
 		},
 	}
 }
 
-func buildMsgExistingUser() users.UserMsg {
-	return users.UserMsg{
+func buildMsgExistingUser() entities.UserMsg {
+	return entities.UserMsg{
 		ID: 1,
 	}
 }

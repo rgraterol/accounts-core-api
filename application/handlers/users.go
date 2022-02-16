@@ -7,12 +7,13 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rgraterol/accounts-core-api/application/responses"
-	"github.com/rgraterol/accounts-core-api/domain/accounts"
-	"github.com/rgraterol/accounts-core-api/domain/users"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
+	"github.com/rgraterol/accounts-core-api/domain/interfaces"
+	"github.com/rgraterol/accounts-core-api/domain/services"
 )
 
 // UsersNews this endpoint is a consumer of users-api feed, to create a new account of users recently registered
-func UsersNews(s users.Interface) func(w http.ResponseWriter, r *http.Request) {
+func UsersNews(s interfaces.UsersService) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		message, err := decodeUsersNewsMessage(r)
 		if err != nil {
@@ -24,7 +25,7 @@ func UsersNews(s users.Interface) func(w http.ResponseWriter, r *http.Request) {
 		// The response we respond here depends on the queue used
 		// If we use Google Pub/Sub or ApachePulsar we should not return a 400 status code
 		// That's why we're returning an OK message, but we are logging inside
-		if err != nil && err == accounts.DuplicatedAccountError {
+		if err != nil && err == services.DuplicatedAccountError {
 			responses.OK(w, err.Error())
 			return
 		}
@@ -40,8 +41,8 @@ func UsersNews(s users.Interface) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func decodeUsersNewsMessage(r *http.Request) (*users.UsersFeedMessage, error) {
-	var message users.UsersFeedMessage
+func decodeUsersNewsMessage(r *http.Request) (*entities.UsersFeedMessage, error) {
+	var message entities.UsersFeedMessage
 	err := json.NewDecoder(r.Body).Decode(&message)
 	if err != nil {
 		return nil, err
