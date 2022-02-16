@@ -1,7 +1,8 @@
 # Accounts Core API
 API that handle money accounts core logic in an online wallet network.
 
-![image](https://user-images.githubusercontent.com/2694731/154365540-e79375d3-b5a2-42f0-83e7-6c9f28137726.png)
+![image](https://user-images.githubusercontent.com/2694731/154365849-a1a5b0a1-ba40-42e4-8c9b-715acd5981bb.png)
+
 
 
 # Technologies
@@ -29,3 +30,28 @@ go run infrastructure/init/main.go
 ```bash
 curl --location --request GET 'http://localhost:8080/ping'
 ``` 
+
+## Tests
+
+To test the application run the following command
+
+````bash
+go test  ./... -covermode=atomic  -coverpkg=./... -count=1  -race -timeout=30m
+````
+
+# Endpoints
+
+## Users-API Feed consumer
+Recieves news from users-api and create new accounts on the registration of new users
+```bash
+curl --location --request POST 'http://localhost:8080/users' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "msg": {
+        "id": 1,
+        "headers": {
+            "new_user": true
+        }
+    }
+}'
+```
