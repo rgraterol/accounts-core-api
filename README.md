@@ -1,5 +1,5 @@
-# Transfers Core API
-API that handle money transfers core logic between accounts in an online wallet network.
+# Accounts Core API
+API that handle money accounts core logic in an online wallet network.
 
 # Technologies
 - Go 1.17

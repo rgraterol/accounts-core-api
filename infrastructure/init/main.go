@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/rgraterol/transfers-core-api/infrastructure/init/initializers"
+	"github.com/rgraterol/accounts-core-api/infrastructure/init/initializers"
 )
 
 func main() {

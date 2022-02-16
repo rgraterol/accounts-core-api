@@ -3,7 +3,7 @@ server:
   timeout: 100
 
 database:
-  url: root:@tcp(localhost:3308)/transfers?parseTime=true
+  url: root:@tcp(localhost:3308)/accounts?parseTime=true
   maxIdleConns: 5
   maxOpenConns: 50
   connMaxLifetime: 60

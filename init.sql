@@ -1,2 +1,2 @@
-CREATE DATABASE IF NOT EXISTS transfers;
-USE transfers;
+CREATE DATABASE IF NOT EXISTS accounts;
+USE accounts;

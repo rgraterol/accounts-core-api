@@ -6,6 +6,6 @@ services:
       - ./init.sql:/data/application/init.sql
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: y
-      MYSQL_DATABASE: transfers
+      MYSQL_DATABASE: accounts
     ports:
       - "3308:3306"
