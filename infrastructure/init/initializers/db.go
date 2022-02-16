@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/rgraterol/transfers-core-api/application/db"
+	"github.com/rgraterol/accounts-core-api/application/db"
 )
 
 var DatabaseConfig DatabaseConfiguration

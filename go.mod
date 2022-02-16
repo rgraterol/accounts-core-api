@@ -1,4 +1,4 @@
-module github.com/rgraterol/transfers-core-api
+module github.com/rgraterol/accounts-core-api
 
 go 1.17
 

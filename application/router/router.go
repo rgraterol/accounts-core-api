@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/rgraterol/transfers-core-api/application/responses"
+	"github.com/rgraterol/accounts-core-api/application/responses"
 )
 
 func Routes(r *chi.Mux) {

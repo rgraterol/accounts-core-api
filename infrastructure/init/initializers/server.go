@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/rgraterol/transfers-core-api/application/router"
+	"github.com/rgraterol/accounts-core-api/application/router"
 )
 
 var serverConfig ServerConfiguration
