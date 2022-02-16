@@ -69,7 +69,7 @@ Even tho the /movements endpoint is in development, we can find all of it's busi
 cURL WIP
 
 
-## Folder Structure
+# Folder Structure
 
 ```
 ...
