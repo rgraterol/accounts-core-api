@@ -68,3 +68,26 @@ Even tho the /movements endpoint is in development, we can find all of it's busi
 
 cURL WIP
 
+
+## Folder Structure
+
+```
+...
+├── configs 
+│   └── Configuration `.yml` files
+├── application // Layer that communicates the domain with the infra. Example: controllers, restclients, DBRepositories.
+│   ├── db
+│   ├── handlers
+│   ├── middlewares
+│   ├── repositories
+│   ├── responses
+│   └── router
+├── domain // Business logic layer
+│   ├── CheckoutController.java
+│   └── PingController.java
+└── infrastructure // Outer layer that connects with external services like DB, logging.
+    ├── init
+    └── main.go
+
+...
+```
