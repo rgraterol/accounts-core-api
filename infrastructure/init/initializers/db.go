@@ -11,7 +11,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rgraterol/accounts-core-api/application/db"
-	"github.com/rgraterol/accounts-core-api/domain/accounts"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
 )
 
 var DatabaseConfig DatabaseConfiguration
@@ -66,7 +66,10 @@ func MockDatabaseInitializer() {
 	if err != nil {
 		panic(errors.Wrap(err, "failed to connect gorm with mock Gorm"))
 	}
-	runMigrations()
+	err = runMigrations()
+	if err != nil {
+		panic(err)
+	}
 }
 
 func initGormLogger() logger.Interface {
@@ -82,12 +85,35 @@ func initGormLogger() logger.Interface {
 }
 
 func runMigrations() error {
-	if db.Gorm.Migrator().HasTable(&accounts.Account{}) {
+	err := runAccountsMigration()
+	if err != nil {
+		return err
+	}
+	err = runMovementsMigration()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func runAccountsMigration() error {
+	if db.Gorm.Migrator().HasTable(&entities.Account{}) {
 		return nil
 	}
-	err := db.Gorm.AutoMigrate(&accounts.Account{})
+	err := db.Gorm.AutoMigrate(&entities.Account{})
 	if err != nil {
 		return errors.Wrap(err, "cannot run accounts migration")
+	}
+	return nil
+}
+
+func runMovementsMigration() error {
+	if db.Gorm.Migrator().HasTable(&entities.Movement{}) {
+		return nil
+	}
+	err := db.Gorm.AutoMigrate(&entities.Movement{})
+	if err != nil {
+		return errors.Wrap(err, "cannot run movements migration")
 	}
 	return nil
 }
