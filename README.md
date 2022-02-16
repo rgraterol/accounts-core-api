@@ -8,6 +8,9 @@ API that handle money accounts core logic in an online wallet network.
 # Technologies
 - Go 1.17
 - MySQL
+- Prometheus
+- Grafana
+- Docker - Alpine
 
 
 # To run the project
