@@ -6,13 +6,12 @@ import (
 )
 
 type Account struct {
-	ID              int64   `json:"id" gorm:"uniqueIndex,primaryKey"`
-	UserID          int64   `json:"name" gorm:"uniqueIndex"`
-	CurrencyID      string  `json:"currency_id" gorm:"index"`
-	Country         string  `json:"country" gorm:"index"`
-	AvailableAmount float64 `json:"available_amount"`
-	BlockReason     string  `json:"block_reason"`
-	Movements       []Movement
+	ID              int64          `json:"id" gorm:"uniqueIndex,primaryKey"`
+	UserID          int64          `json:"name" gorm:"uniqueIndex"`
+	CurrencyID      string         `json:"currency_id" gorm:"index"`
+	Country         string         `json:"country" gorm:"index"`
+	AvailableAmount float64        `json:"available_amount"`
+	BlockReason     string         `json:"block_reason"`
 	UpdatedAt       time.Time      `json:"-"`
 	CreatedAt       time.Time      `json:"-"`
 	DeletedAt       gorm.DeletedAt `json:"-" gorm:"index"`

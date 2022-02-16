@@ -10,13 +10,13 @@ import (
 
 type Accounts struct{}
 
-func (s *Accounts) GetAccountByUserID(userID int64) (entities.Account, error) {
+func (s *Accounts) GetByUserID(userID int64) (entities.Account, error) {
 	var account entities.Account
 	trx := db.Gorm.Where("user_id = ?", userID).First(&account)
 	return account, trx.Error
 }
 
-func (s *Accounts) CreateAccount(account entities.Account) (entities.Account, error) {
+func (s *Accounts) Create(account entities.Account) (entities.Account, error) {
 	trx := db.Gorm.Create(&account)
 	if trx.Error != nil {
 		zap.S().Error(trx.Error)
@@ -26,7 +26,7 @@ func (s *Accounts) CreateAccount(account entities.Account) (entities.Account, er
 }
 
 // Here we should only update single column, I'm updating whole object because is a test app
-func (s *Accounts) UpdateAccount(account entities.Account) (entities.Account, error) {
+func (s *Accounts) Update(account entities.Account) (entities.Account, error) {
 	trx := db.Gorm.Save(&account)
 	if trx.Error != nil {
 		err := errors.Wrap(trx.Error, "cannot update account")

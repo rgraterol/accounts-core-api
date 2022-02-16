@@ -18,9 +18,9 @@ type Accounts struct {
 }
 
 func (s *Accounts) SaveNewAccount(userID int64, countryID string) error {
-	_, err := s.repository.GetAccountByUserID(userID)
+	_, err := s.repository.GetByUserID(userID)
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		_, err = s.repository.CreateAccount(buildNewAccount(userID, countryID))
+		_, err = s.repository.Create(buildNewAccount(userID, countryID))
 		return err
 	}
 	if err != nil {

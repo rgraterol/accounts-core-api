@@ -9,3 +9,28 @@ services:
       MYSQL_DATABASE: accounts
     ports:
       - "3308:3306"
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    ports:
+      - 9090:9090
+    depends_on:
+      - go-app
+
+  go-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8080:8080
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus

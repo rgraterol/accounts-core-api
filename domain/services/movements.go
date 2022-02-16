@@ -36,13 +36,13 @@ func (m *Movements) P2P(input entities.MovementInput) (*entities.Movement, error
 }
 
 func (m *Movements) GetPayerAndCollectorAccounts(input entities.MovementInput) error {
-	payerAccount, err := m.AccountsRepository.GetAccountByUserID(input.PayerUserID)
+	payerAccount, err := m.AccountsRepository.GetByUserID(input.PayerUserID)
 	if err != nil {
 		err = errors.Wrap(err, "cannot retrieve payer account")
 		return err
 	}
 	m.PayerAccount = &payerAccount
-	collectorAccount, err := m.AccountsRepository.GetAccountByUserID(input.CollectorUserID)
+	collectorAccount, err := m.AccountsRepository.GetByUserID(input.CollectorUserID)
 	if err != nil {
 		err = errors.Wrap(err, "cannot retrieve collector account")
 		return err
@@ -97,7 +97,7 @@ func (m *Movements) UpdateMovement(status string, falledErr error) error {
 }
 
 func (m *Movements) SavePayerAccountWithRollback(falledError error) error {
-	_, err := m.AccountsRepository.UpdateAccount(*m.PayerAccount)
+	_, err := m.AccountsRepository.Update(*m.PayerAccount)
 	if err != nil {
 		// ROLLING BACK MOVEMENT TO ERROR STATUS
 		zap.S().Error(err)
@@ -107,7 +107,7 @@ func (m *Movements) SavePayerAccountWithRollback(falledError error) error {
 }
 
 func (m *Movements) SaveCollectorAccountWithRollback() error {
-	_, err := m.AccountsRepository.UpdateAccount(*m.CollectorAccount)
+	_, err := m.AccountsRepository.Update(*m.CollectorAccount)
 	if err != nil {
 		// ROLLING BACK amount FOR PAYER
 		zap.S().Error(err)
