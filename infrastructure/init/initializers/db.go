@@ -11,6 +11,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rgraterol/accounts-core-api/application/db"
+	"github.com/rgraterol/accounts-core-api/domain/accounts"
 )
 
 var DatabaseConfig DatabaseConfiguration
@@ -39,25 +40,33 @@ func DatabaseInitializer() {
 		DatabaseConfig.URL = url
 	}
 
-	db.DB, err = gorm.Open(mysql.Open(DatabaseConfig.URL), &gorm.Config{Logger: initGormLogger()})
+	db.Gorm, err = gorm.Open(mysql.Open(DatabaseConfig.URL), &gorm.Config{Logger: initGormLogger()})
 	if err != nil {
-		panic(errors.Wrap(err, "failed to initialize the DB"))
+		panic(errors.Wrap(err, "failed to initialize the Gorm"))
 	}
-	pool, err := db.DB.DB()
+	pool, err := db.Gorm.DB()
 	if err != nil {
 		panic(errors.Wrap(err, "failed to configure connection pool"))
 	}
 	pool.SetMaxIdleConns(DatabaseConfig.MaxIdleConns)
 	pool.SetMaxOpenConns(DatabaseConfig.MaxOpenConns)
 	pool.SetConnMaxLifetime(time.Duration(DatabaseConfig.ConnMaxLifetime))
+
+	if DatabaseConfig.AutoMigrate {
+		err = runMigrations()
+		if err != nil {
+			panic(err)
+		}
+	}
 }
 
 func MockDatabaseInitializer() {
 	var err error
-	db.DB, err = gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{Logger: initGormLogger()})
+	db.Gorm, err = gorm.Open(sqlite.Open("file::memory:?cache=shared"), &gorm.Config{Logger: initGormLogger()})
 	if err != nil {
-		panic(errors.Wrap(err, "failed to connect gorm with mock DB"))
+		panic(errors.Wrap(err, "failed to connect gorm with mock Gorm"))
 	}
+	runMigrations()
 }
 
 func initGormLogger() logger.Interface {
@@ -70,4 +79,15 @@ func initGormLogger() logger.Interface {
 			Colorful:                  true,
 		},
 	)
+}
+
+func runMigrations() error {
+	if db.Gorm.Migrator().HasTable(&accounts.Account{}) {
+		return nil
+	}
+	err := db.Gorm.AutoMigrate(&accounts.Account{})
+	if err != nil {
+		return errors.Wrap(err, "cannot run accounts migration")
+	}
+	return nil
 }
