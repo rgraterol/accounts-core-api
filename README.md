@@ -11,6 +11,7 @@ API that handle money accounts core logic in an online wallet network.
 - Prometheus
 - Grafana
 - Docker - Alpine
+- [WIP] Datadog
 
 
 # To run the project
@@ -33,6 +34,8 @@ go run infrastructure/init/main.go
 ```bash
 curl --location --request GET 'http://localhost:8080/ping'
 ``` 
+
+ZAP creates the folder `/logs` which creates .txt files in the `"MM-DD-YYY"` to record logs
 
 ## Tests
 
