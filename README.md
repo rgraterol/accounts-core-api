@@ -55,3 +55,9 @@ curl --location --request POST 'http://localhost:8080/users' \
     }
 }'
 ```
+
+## Movements
+Even tho the /movements endpoint is in development, we can find all of it's business logic inside the domain layer `/domain/entities/movements.go` `/domain/interfacesmovements.go` and `/domain/services/movements.go`
+
+cURL WIP
+
