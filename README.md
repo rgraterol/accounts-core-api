@@ -36,7 +36,7 @@ curl --location --request GET 'http://localhost:8080/ping'
 ``` 
 
 
-**Notice: ZAP creates the folder `/logs` which creates .txt files in the `"MM-DD-YYY"` to record logs**
+**Notice: ZAP creates the folder `/logs` which creates `.txt` files in the `MM-DD-YYY`format to record logs**
 
 ## Tests
 
