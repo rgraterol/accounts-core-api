@@ -35,7 +35,8 @@ go run infrastructure/init/main.go
 curl --location --request GET 'http://localhost:8080/ping'
 ``` 
 
-ZAP creates the folder `/logs` which creates .txt files in the `"MM-DD-YYY"` to record logs
+
+*Notice: ZAP creates the folder `/logs` which creates .txt files in the `"MM-DD-YYY"` to record logs*
 
 ## Tests
 
