@@ -13,40 +13,40 @@ var errorDB = errors.New(genericDBError)
 
 type AccountsRepositoryMockOk struct{}
 
-func (r *AccountsRepositoryMockOk) CreateAccount(account entities.Account) (entities.Account, error) {
+func (r *AccountsRepositoryMockOk) Create(account entities.Account) (entities.Account, error) {
 	return entities.Account{}, nil
 }
 
-func (r *AccountsRepositoryMockOk) GetAccountByUserID(userID int64) (entities.Account, error) {
+func (r *AccountsRepositoryMockOk) GetByUserID(userID int64) (entities.Account, error) {
 	return entities.Account{}, nil
 }
-func (r *AccountsRepositoryMockOk) UpdateAccount(account entities.Account) (entities.Account, error) {
+func (r *AccountsRepositoryMockOk) Update(account entities.Account) (entities.Account, error) {
 	return entities.Account{}, nil
 }
 
 type AccountsRepositoryMockPayerRich struct{}
 
-func (r *AccountsRepositoryMockPayerRich) CreateAccount(account entities.Account) (entities.Account, error) {
+func (r *AccountsRepositoryMockPayerRich) Create(account entities.Account) (entities.Account, error) {
 	return entities.Account{}, nil
 }
 
-func (r *AccountsRepositoryMockPayerRich) GetAccountByUserID(userID int64) (entities.Account, error) {
+func (r *AccountsRepositoryMockPayerRich) GetByUserID(userID int64) (entities.Account, error) {
 	return entities.Account{AvailableAmount: 10000}, nil
 }
-func (r *AccountsRepositoryMockPayerRich) UpdateAccount(account entities.Account) (entities.Account, error) {
+func (r *AccountsRepositoryMockPayerRich) Update(account entities.Account) (entities.Account, error) {
 	return entities.Account{}, nil
 }
 
 type AccountsRepositoryMockError struct{}
 
-func (r *AccountsRepositoryMockError) CreateAccount(account entities.Account) (entities.Account, error) {
+func (r *AccountsRepositoryMockError) Create(account entities.Account) (entities.Account, error) {
 	return entities.Account{}, errorDB
 }
 
-func (r *AccountsRepositoryMockError) GetAccountByUserID(userID int64) (entities.Account, error) {
+func (r *AccountsRepositoryMockError) GetByUserID(userID int64) (entities.Account, error) {
 	return entities.Account{}, errorDB
 }
-func (r *AccountsRepositoryMockError) UpdateAccount(account entities.Account) (entities.Account, error) {
+func (r *AccountsRepositoryMockError) Update(account entities.Account) (entities.Account, error) {
 	return entities.Account{}, errorDB
 }
 
