@@ -32,10 +32,9 @@ func (s *Accounts) SaveNewAccount(userID int64, countryID string) error {
 
 func buildNewAccount(id int64, countryID string) entities.Account {
 	return entities.Account{
-		UserID:            id,
-		Country:           countryID,
-		CurrencyID:        entities.CountriesCurrenciesMap[countryID],
-		TotalAmount:       float64(0),
-		UnavailableAmount: float64(0),
+		UserID:          id,
+		Country:         countryID,
+		CurrencyID:      entities.CountriesCurrenciesMap[countryID],
+		AvailableAmount: float64(0),
 	}
 }

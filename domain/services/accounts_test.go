@@ -3,14 +3,14 @@ package services_test
 import (
 	"testing"
 
-	"github.com/rgraterol/accounts-core-api/domain/entities"
 	"github.com/rgraterol/accounts-core-api/domain/services"
 	"github.com/stretchr/testify/assert"
 )
 
 const (
-	mockCountryID = "UK"
-	mockUserID    = int64(1)
+	mockCountryID   = "UK"
+	mockUserID      = int64(1)
+	mockCollectorID = int64(2)
 )
 
 func Test_GivenValidInputs_WhenCreate_ThenReturnOk(t *testing.T) {
@@ -32,10 +32,4 @@ func Test_GivenExistingInputs_WhenCreate_ThenReturnDuplicatedError(t *testing.T)
 	// Then
 	assert.NotNil(t, err)
 	assert.Contains(t, err.Error(), services.DuplicatedAccountError)
-}
-
-type RepositoryMockOk struct{}
-
-func (r *RepositoryMockOk) CreateAccount(account entities.Account) (entities.Account, error) {
-	return entities.Account{}, nil
 }

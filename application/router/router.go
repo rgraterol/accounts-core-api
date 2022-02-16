@@ -6,8 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/rgraterol/accounts-core-api/application/handlers"
 	"github.com/rgraterol/accounts-core-api/application/responses"
-	"github.com/rgraterol/accounts-core-api/domain/accounts"
-	"github.com/rgraterol/accounts-core-api/domain/users"
+	"github.com/rgraterol/accounts-core-api/domain/services"
 )
 
 func Routes(r *chi.Mux) {
@@ -23,8 +22,8 @@ func basePingHandler(w http.ResponseWriter, _ *http.Request) {
 	responses.OK(w, "pong")
 }
 
-func buildProductiveUsersInterface() users.Service {
-	return users.Service{
-		AccountService: &accounts.Service{},
+func buildProductiveUsersInterface() services.Users {
+	return services.Users{
+		AccountsService: &services.Accounts{},
 	}
 }

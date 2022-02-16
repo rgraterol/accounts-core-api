@@ -3,6 +3,17 @@ package interfaces
 import "github.com/rgraterol/accounts-core-api/domain/entities"
 
 type MovementsService interface {
-	P2P(payerID int64, collectorID int64, ammount float64) (entities.Movement, error)
-	getPayerAndCollectorAccounts(payerID int64, collectorID int64) (*entities.Account, *entities.Account, error)
+	P2P(input entities.MovementInput) (*entities.Movement, error)
+	GetPayerAndCollectorAccounts(input entities.MovementInput) error
+	TransferP2P() error
+	SaveTransferWithRollback() error
+	UpdateMovement(status string) error
+	SavePayerAccountWithRollback() error
+	SaveCollectorAccountWithRollback() error
+	BuildNewMovement() entities.Movement
+}
+
+type MovementsRepository interface {
+	Create(movement entities.Movement) (entities.Movement, error)
+	Update(movement entities.Movement) (entities.Movement, error)
 }

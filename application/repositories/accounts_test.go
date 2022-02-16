@@ -5,7 +5,7 @@ import (
 
 	"github.com/rgraterol/accounts-core-api/application/db"
 	"github.com/rgraterol/accounts-core-api/application/repositories"
-	"github.com/rgraterol/accounts-core-api/domain/accounts"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
 	"github.com/rgraterol/accounts-core-api/infrastructure/init/initializers"
 	"github.com/stretchr/testify/assert"
 )
@@ -30,8 +30,8 @@ func Test_GivenValidAccount_WhenCreateAccount_ThenReturnOk(t *testing.T) {
 	assert.Equal(t, mockCurrency, account.CurrencyID)
 }
 
-func buildMockAccount() accounts.Account {
-	return accounts.Account{
+func buildMockAccount() entities.Account {
+	return entities.Account{
 		ID:         1,
 		UserID:     mockUserID,
 		CurrencyID: mockCurrency,

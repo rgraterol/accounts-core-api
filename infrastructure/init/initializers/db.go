@@ -11,8 +11,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/rgraterol/accounts-core-api/application/db"
-	"github.com/rgraterol/accounts-core-api/domain/accounts"
-	"github.com/rgraterol/accounts-core-api/domain/movements"
+	"github.com/rgraterol/accounts-core-api/domain/entities"
 )
 
 var DatabaseConfig DatabaseConfiguration
@@ -98,10 +97,10 @@ func runMigrations() error {
 }
 
 func runAccountsMigration() error {
-	if db.Gorm.Migrator().HasTable(&accounts.Account{}) {
+	if db.Gorm.Migrator().HasTable(&entities.Account{}) {
 		return nil
 	}
-	err := db.Gorm.AutoMigrate(&accounts.Account{})
+	err := db.Gorm.AutoMigrate(&entities.Account{})
 	if err != nil {
 		return errors.Wrap(err, "cannot run accounts migration")
 	}
@@ -109,10 +108,10 @@ func runAccountsMigration() error {
 }
 
 func runMovementsMigration() error {
-	if db.Gorm.Migrator().HasTable(&movements.Movement{}) {
+	if db.Gorm.Migrator().HasTable(&entities.Movement{}) {
 		return nil
 	}
-	err := db.Gorm.AutoMigrate(&movements.Movement{})
+	err := db.Gorm.AutoMigrate(&entities.Movement{})
 	if err != nil {
 		return errors.Wrap(err, "cannot run movements migration")
 	}
