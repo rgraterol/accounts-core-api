@@ -1,28 +1,15 @@
-FROM golang:1.17-alpine
-
-RUN apk update && apk upgrade
-RUN apk add --no-cache gcc
-RUN apk add --no-cache sqlite
-RUN apk add libc-dev
-
-ADD . /go/src/accounts-core-api
-
-RUN mv /go/src/accounts-core-api /app
+FROM golang:1.17.7 as builder
 
 WORKDIR /app
 
-COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
 
 COPY . .
-
-RUN go install /app/infrastructure/init/main.go
-
-RUN chmod +x /app/infrastructure/init/main.go
+RUN go build -v -o /app/ ./...
 
 EXPOSE 8080
 
-ENTRYPOINT ["/app/infrastructure/init/main.go"]
+CMD ["/app/accounts-core-api"]
 
 RUN echo "Server running on port 8080"

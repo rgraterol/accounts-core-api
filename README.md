@@ -15,26 +15,15 @@ API that handle money accounts core logic in an online wallet network.
 
 
 # To run the project
-- Initialize the DB
+- Initialize all the containers, including the go docker image
 ```
 docker-compose up -d
-```
-
-- Download dependencies
-```bash
-go mod download
-```
-
-- Run Project
-```bash
-go run infrastructure/init/main.go
 ```
 
 - Test if server is up and running
 ```bash
 curl --location --request GET 'http://localhost:8080/ping'
-``` 
-
+```
 
 **Notice: ZAP creates the folder `/logs` which creates `.txt` files in the `MM-DD-YYY`format to record logs**
 
