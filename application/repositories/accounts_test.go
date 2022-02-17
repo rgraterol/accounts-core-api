@@ -6,7 +6,7 @@ import (
 	"github.com/rgraterol/accounts-core-api/application/db"
 	"github.com/rgraterol/accounts-core-api/application/repositories"
 	"github.com/rgraterol/accounts-core-api/domain/entities"
-	"github.com/rgraterol/accounts-core-api/infrastructure/init/initializers"
+	"github.com/rgraterol/accounts-core-api/infrastructure/initializers"
 	"github.com/stretchr/testify/assert"
 )
 
