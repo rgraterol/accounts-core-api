@@ -17,22 +17,37 @@ type Movements struct {
 	MovementsRepository interfaces.MovementsRepository
 	PayerAccount        *entities.Account
 	CollectorAccount    *entities.Account
-	Input               *entities.MovementInput
+	Deposit             *entities.Deposit
 	Movement            *entities.Movement
 }
 
 func (m *Movements) P2P(input entities.MovementInput) (*entities.Movement, error) {
+	m.Deposit = &input.Deposit
 	err := m.GetPayerAndCollectorAccounts(input)
 	if err != nil {
 		zap.S().Error(err)
 		return nil, err
 	}
-	if m.PayerAccount.CanMakeOutputMovement(input.Amount) {
+	if m.PayerAccount.CanMakeOutputMovement(input.Deposit.Amount) {
 		// Here we should lock the registries to avoid race conditions to the DB
 		// This can be done with a distributed cache or with a DB Lock
 		return m.Movement, m.TransferP2P()
 	}
 	return nil, NFSError
+}
+
+func (m *Movements) MakeDeposit(userID int64, deposit entities.Deposit) (*entities.Movement, error) {
+	m.Deposit = &deposit
+	err := m.GetPayerAndCollectorAccounts(entities.MovementInput{CollectorUserID: userID, PayerUserID: userID})
+	if err != nil {
+		return nil, err
+	}
+	m.CollectorAccount.AddAmount(deposit.Amount)
+	err = m.buildAndCreateNewMovement()
+	if err != nil {
+		return nil, err
+	}
+	return m.Movement, m.SaveDepositWithRollback()
 }
 
 func (m *Movements) GetPayerAndCollectorAccounts(input entities.MovementInput) error {
@@ -52,16 +67,12 @@ func (m *Movements) GetPayerAndCollectorAccounts(input entities.MovementInput) e
 }
 
 func (m *Movements) TransferP2P() error {
-	m.PayerAccount.DebitAmount(m.Input.Amount)
-	m.CollectorAccount.AddAmount(m.Input.Amount)
-	movement := m.BuildNewMovement()
-	_, err := m.MovementsRepository.Create(movement)
+	m.PayerAccount.DebitAmount(m.Deposit.Amount)
+	m.CollectorAccount.AddAmount(m.Deposit.Amount)
+	err := m.buildAndCreateNewMovement()
 	if err != nil {
-		err = errors.Wrap(err, "cannot save movement")
-		zap.S().Error(err)
 		return err
 	}
-	m.Movement = &movement
 	return m.SaveTransferWithRollback()
 }
 
@@ -71,6 +82,18 @@ func (m *Movements) SaveTransferWithRollback() error {
 		return err
 	}
 	err = m.SaveCollectorAccountWithRollback()
+	if err != nil {
+		return err
+	}
+	err = m.UpdateMovement(entities.MovementDone, nil)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *Movements) SaveDepositWithRollback() error {
+	err := m.SaveCollectorAccountWithRollback()
 	if err != nil {
 		return err
 	}
@@ -111,7 +134,7 @@ func (m *Movements) SaveCollectorAccountWithRollback() error {
 	if err != nil {
 		// ROLLING BACK amount FOR PAYER
 		zap.S().Error(err)
-		m.PayerAccount.AddAmount(m.Input.Amount)
+		m.PayerAccount.AddAmount(m.Deposit.Amount)
 		return m.SavePayerAccountWithRollback(err)
 	}
 	return nil
@@ -123,12 +146,24 @@ func (m *Movements) BuildNewMovement() entities.Movement {
 		PayerAccountID:     m.PayerAccount.ID,
 		CollectorUserID:    m.CollectorAccount.UserID,
 		CollectorAccountID: m.CollectorAccount.ID,
-		Amount:             m.Input.Amount,
+		Amount:             m.Deposit.Amount,
 		PayerBalance:       m.PayerAccount.AvailableAmount,
 		CollectorBalance:   m.CollectorAccount.AvailableAmount,
-		Reason:             m.Input.Reason,
-		CurrencyID:         m.Input.CurrencyID,
+		Reason:             m.Deposit.Reason,
+		CurrencyID:         m.Deposit.CurrencyID,
 		CountryID:          m.PayerAccount.Country,
 		Status:             entities.MovementInProgress,
 	}
+}
+
+func (m *Movements) buildAndCreateNewMovement() error {
+	movement := m.BuildNewMovement()
+	createdMovement, err := m.MovementsRepository.Create(movement)
+	if err != nil {
+		err = errors.Wrap(err, "cannot save movement")
+		zap.S().Error(err)
+		return err
+	}
+	m.Movement = &createdMovement
+	return nil
 }

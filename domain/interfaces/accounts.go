@@ -10,4 +10,5 @@ type AccountsRepository interface {
 
 type AccountsService interface {
 	SaveNewAccount(id int64, countryID string) error
+	Get(userID int64) (entities.Account, error)
 }

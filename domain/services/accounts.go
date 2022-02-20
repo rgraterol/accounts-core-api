@@ -14,13 +14,13 @@ var (
 )
 
 type Accounts struct {
-	repository interfaces.AccountsRepository
+	Repository interfaces.AccountsRepository
 }
 
 func (s *Accounts) SaveNewAccount(userID int64, countryID string) error {
-	_, err := s.repository.GetByUserID(userID)
+	_, err := s.Repository.GetByUserID(userID)
 	if err != nil && errors.Is(err, gorm.ErrRecordNotFound) {
-		_, err = s.repository.Create(buildNewAccount(userID, countryID))
+		_, err = s.Repository.Create(buildNewAccount(userID, countryID))
 		return err
 	}
 	if err != nil {
@@ -28,6 +28,10 @@ func (s *Accounts) SaveNewAccount(userID int64, countryID string) error {
 		return err
 	}
 	return DuplicatedAccountError
+}
+
+func (s *Accounts) Get(userID int64) (entities.Account, error) {
+	return s.Repository.GetByUserID(userID)
 }
 
 func buildNewAccount(id int64, countryID string) entities.Account {
