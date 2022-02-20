@@ -234,6 +234,10 @@ curl --location --request GET 'localhost:8080/users/2'
 ```
 
 
+# Killing feature
+A nice feature that the API doesn't handle completely but it has some things already developed is a multi-site, multi-currency feature. For the users to transfer money between countries.
+We now support the country and currency on the data objects but for this feature we might need to make an exchange rate service inside the API calling another API that gives us the exchange rate between currencies for us to calculate it.
+
 # Folder Structure
 
 ```
