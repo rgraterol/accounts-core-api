@@ -18,3 +18,7 @@ func (s *Users) ReadUsersFeed(message entities.UserMsg) error {
 	}
 	return nil
 }
+
+func (s *Users) Get(userID int64) (entities.Account, error) {
+	return s.AccountsService.Get(userID)
+}

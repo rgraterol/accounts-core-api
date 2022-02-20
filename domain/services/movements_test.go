@@ -206,7 +206,7 @@ func buildMovementServiceMockOk() services.Movements {
 	return services.Movements{
 		AccountsRepository:  &AccountsRepositoryMockOk{},
 		MovementsRepository: &MovementsRepositoryMockOk{},
-		Input:               buildMockInput(),
+		Deposit:             buildMockInput(),
 		PayerAccount:        buildMockPayerAccount(),
 		CollectorAccount:    buildMockCollectorAccount(),
 		Movement:            buildMockMovement(),
@@ -214,10 +214,13 @@ func buildMovementServiceMockOk() services.Movements {
 }
 
 func buildMockInput() *entities.MovementInput {
+	deposit := entities.Deposit{
+		Amount:     amountMock,
+		Reason:     "lunch",
+		CurrencyID: "EUR",
+	}
 	return &entities.MovementInput{
-		Amount:          amountMock,
-		Reason:          "lunch",
-		CurrencyID:      "EUR",
+		Deposit:         deposit,
 		PayerUserID:     mockUserID,
 		CollectorUserID: mockCollectorID,
 	}

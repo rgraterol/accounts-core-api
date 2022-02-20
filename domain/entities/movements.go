@@ -12,15 +12,19 @@ const (
 )
 
 type MovementInput struct {
-	Amount          float64 `json:"amount"`
-	Reason          string  `json:"reason"`
-	CurrencyID      string  `json:"currency_id"`
-	PayerUserID     int64   `json:"payer_id"`
+	Deposit         Deposit `json:"deposit"`
+	PayerUserID     int64   `json:"payer_user_id"`
 	CollectorUserID int64   `json:"collector_user_id"`
 }
 
+type Deposit struct {
+	Amount     float64 `json:"amount"`
+	Reason     string  `json:"reason"`
+	CurrencyID string  `json:"currency_id"`
+}
+
 type Movement struct {
-	ID                 int64          `json:"id" gorm:"uniqueIndex,primaryKey"`
+	ID                 int64          `json:"id" gorm:"primaryKey"`
 	PayerUserID        int64          `json:"payer_user_id" gorm:"index"`
 	PayerAccountID     int64          `json:"payer_account_id" gorm:"index"`
 	CollectorUserID    int64          `json:"collector_user_id" gorm:"index"`
